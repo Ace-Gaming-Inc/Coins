@@ -2,6 +2,7 @@ package me.justeli.coins.util;
 
 import io.papermc.lib.PaperLib;
 import me.justeli.coins.config.Config;
+import me.justeli.coins.config.MessagePosition;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -36,7 +37,7 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/** Created by Eli on 6 jan. 2020. */
+/* Eli @ January 6, 2020 (creation) */
 public final class Util
 {
     private static final Pattern HEX_PATTERN = Pattern.compile("(?<!\\\\)(&#[a-fA-F\\d]{6})");
@@ -91,9 +92,9 @@ public final class Util
             for (PermissionAttachmentInfo permissionInfo : player.getEffectivePermissions())
             {
                 String permission = permissionInfo.getPermission();
-                if (permission.startsWith(Permission.MULTIPLIER_PREFIX))
+                if (permission.startsWith(PermissionNode.MULTIPLIER_PREFIX))
                 {
-                    permissions.add(Permission.multiplierFromPermission(permission));
+                    permissions.add(PermissionNode.multiplierFromPermission(permission));
                 }
             }
             PLAYER_MULTIPLIER.put(player.getUniqueId(), permissions.size() == 0? 1D : Collections.max(permissions));
@@ -104,18 +105,18 @@ public final class Util
     public static boolean isHostile (Entity entity)
     {
         return entity instanceof Monster
-                || entity instanceof Flying
-                || entity instanceof Slime
-                || (entity instanceof Golem && !(entity instanceof Snowman))
-                || (entity instanceof Wolf && ((Wolf) entity).isAngry())
-                || entity instanceof Boss;
+            || entity instanceof Flying
+            || entity instanceof Slime
+            || (entity instanceof Golem && !(entity instanceof Snowman))
+            || (entity instanceof Wolf && ((Wolf) entity).isAngry())
+            || entity instanceof Boss;
     }
 
     public static boolean isPassive (Entity entity)
     {
         return !isHostile(entity)
-                && !(entity instanceof Player)
-                && entity instanceof LivingEntity;
+            && !(entity instanceof Player)
+            && entity instanceof LivingEntity;
     }
 
     public static Player getOnlinePlayer (String incomplete)
@@ -177,7 +178,14 @@ public final class Util
 
     public static String doubleToString (double input)
     {
-        return String.format("%." + Config.MONEY_DECIMALS + "f", round(input));
+        if (Config.DETECT_LEGACY_COINS)
+        {
+            return String.format("%." + Config.MONEY_DECIMALS + "f", round(input));
+        }
+        else
+        {
+            return Config.DECIMAL_FORMATTER.format(round(input));
+        }
     }
 
     public static Optional<Integer> parseInt (String arg)
@@ -250,5 +258,36 @@ public final class Util
         }
 
         return Optional.empty();
+    }
+
+    public static void send (MessagePosition position, Player player, String message, double amount)
+    {
+        switch (position)
+        {
+            case ACTIONBAR:
+                new ActionBar(message, amount).send(player);
+                break;
+            case TITLE:
+                player.sendTitle(Util.color(Util.formatAmountAndCurrency(message, amount)), ChatColor.RESET.toString(), 10, 100, 20);
+                break;
+            case SUBTITLE:
+                SubTitle.of(Util.formatAmountAndCurrency(message, amount)).send(player);
+                break;
+            case CHAT:
+                player.sendMessage(Util.color(Util.formatAmountAndCurrency(message, amount)));
+                break;
+        }
+    }
+
+    public static String repeat (String message, int times)
+    {
+        StringBuilder builder = new StringBuilder();
+
+        for (int i = 0; i < times; i++)
+        {
+            builder.append(message);
+        }
+
+        return builder.toString();
     }
 }
