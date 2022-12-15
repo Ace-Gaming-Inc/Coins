@@ -23,6 +23,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,7 +36,8 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.logging.Level;
 
-/** Created by Eli on 12/14/2016. Rewritten by Eli on July 9, 2021. */
+/* Eli @ December 14, 2016 (creation) */
+/* Eli @ July 9, 2021 (rewrite) */
 public final class Settings
 {
     private final Coins coins;
@@ -46,8 +49,7 @@ public final class Settings
         this.fallbackLanguage = retrieveFallbackLanguage();
     }
 
-    private static final String[] LANGUAGES = new String[]
-    {
+    private static final String[] LANGUAGES = new String[] {
         "english",
         "dutch",
         "spanish",      // spigot::robi 2017/4
@@ -117,11 +119,11 @@ public final class Settings
                         Object defaultValue = prefixSuffix + field.get(Config.class) + prefixSuffix;
 
                         warning(String.format(
-                                "\nConfig file is missing key `%s`. Using its default value now (%s)."
-                                        + (configEntry.motivation().isEmpty()? "" : " " + configEntry.motivation())
-                                        + " Consider to add this to the config:\n----------------------------------------\n%s: %s" +
-                                        "\n----------------------------------------",
-                                configEntry.value(), defaultValue, configEntry.value().replace(".", ":\n  "), defaultValue
+                            "\nConfig file is missing key `%s`. Using its default value now (%s)."
+                                    + (configEntry.motivation().isEmpty()? "" : " " + configEntry.motivation())
+                                    + " Consider to add this to the config:\n----------------------------------------\n%s: %s" +
+                                    "\n----------------------------------------",
+                            configEntry.value(), defaultValue, configEntry.value().replace(".", ":\n  "), defaultValue
                         ));
                     }
                     continue;
@@ -143,13 +145,13 @@ public final class Settings
                     for (Map.Entry<String, Object> mapLoop : map.entrySet())
                     {
                         configMap.put(
-                                mapLoop.getKey().toUpperCase(Locale.ROOT).replace(" ", "_"),
-                                Util.parseInt(mapLoop.getValue().toString()).orElse(1)
+                            mapLoop.getKey().toUpperCase(Locale.ROOT).replace(" ", "_"),
+                            Util.parseInt(mapLoop.getValue().toString()).orElse(1)
                         );
                     }
                     configValue = configMap;
                 }
-                else if (configClass == String.class || configClass == Material.class || configClass == Sound.class)
+                else if (configClass == String.class || configClass == Material.class || configClass == Sound.class || configClass == MessagePosition.class)
                 {
                     String value = config.getString(configKey);
                     if (value == null)
@@ -164,6 +166,12 @@ public final class Settings
                     {
                         configValue = getSound(value, configEntry.value()).orElse(Sound.ITEM_ARMOR_EQUIP_GOLD);
                     }
+                    else if (configClass == MessagePosition.class)
+                    {
+                        Optional<MessagePosition> position = getMessagePosition(value, configEntry.value());
+                        if (position.isPresent()) configValue = position.get();
+                        else continue;
+                    }
                     else
                     {
                         configValue = Util.color(value);
@@ -172,7 +180,7 @@ public final class Settings
                 // can be improved in java 11
                 else if (configClass == Long.class || configClass == Integer.class || configClass == Float.class || configClass == Double.class)
                 {
-                    Double value = Double.parseDouble(config.get(configKey, "0").toString());
+                    Double value = new Double(config.get(configKey, "0").toString());
 
                     if (configClass == Long.class)
                     {
@@ -205,9 +213,9 @@ public final class Settings
                 {
                     Object defaultValue = field.get(Config.class);
                     warning(String.format(
-                            "Config file has wrong value at `%s`. Using its default value now (%s).",
-                            configEntry.value(),
-                            defaultValue
+                        "Config file has wrong value at `%s`. Using its default value now (%s).",
+                        configEntry.value(),
+                        defaultValue
                     ));
                 }
                 catch (IllegalAccessException ignored) {}
@@ -219,7 +227,7 @@ public final class Settings
 
     private void parseRemainingOptions ()
     {
-        // start compatibility with older versions
+        // beginning of compatibility for older versions
 
         if (Config.DETECT_LEGACY_COINS)
         {
@@ -244,7 +252,7 @@ public final class Settings
 
         Config.RAW_BLOCK_DROPS.putAll(Config.LEGACY_RAW_BLOCK_MULTIPLIER);
 
-        // end compatibility with older versions
+        // end of compatibility for older versions
 
         Config.BLOCK_DROPS.clear();
         Config.RAW_BLOCK_DROPS.forEach((k, v) ->
@@ -259,6 +267,18 @@ public final class Settings
             Optional<EntityType> entityType = getEntityType(k, "mob-multiplier");
             entityType.ifPresent(type -> Config.MOB_MULTIPLIER.put(type, v));
         });
+
+        DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols(Locale.US);
+        if (Config.DIGIT_DECIMAL_SEPARATOR.length() == 1) formatSymbols.setDecimalSeparator(Config.DIGIT_DECIMAL_SEPARATOR.charAt(0));
+        if (Config.DIGIT_GROUP_SEPARATOR.length() == 1) formatSymbols.setGroupingSeparator(Config.DIGIT_GROUP_SEPARATOR.charAt(0));
+
+        String decimals = Config.MONEY_DECIMALS == 0? "#" : Util.repeat("0", Config.MONEY_DECIMALS);
+        String groupSeparator = Config.DIGIT_GROUP_SEPARATOR.isEmpty()? "" : ",";
+
+        Config.DECIMAL_FORMATTER = new DecimalFormat(
+            "#" + groupSeparator + "##0." + decimals,
+            formatSymbols
+        );
     }
 
     private Optional<Material> getMaterial (String name, String configKey)
@@ -268,12 +288,26 @@ public final class Settings
         if (material == null)
         {
             warning("The material '" + name + "' in the config at `" + configKey + "` does not exist. Please use a " +
-                    "material from: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html");
+                "material from: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html");
 
             return Optional.empty();
         }
 
         return Optional.of(material);
+    }
+
+    private Optional<MessagePosition> getMessagePosition (String name, String configKey)
+    {
+        try
+        {
+            return Optional.of(MessagePosition.valueOf(name.replace(" ", "_").toUpperCase(Locale.ROOT)));
+        }
+        catch (IllegalArgumentException exception)
+        {
+            warning("Message position '" + name + "' in the config at `" + configKey
+                + "` is invalid. Use either 'actionbar', 'title', 'subtitle', or 'chat'.");
+            return Optional.empty();
+        }
     }
 
     private Optional<EntityType> getEntityType (String name, String configKey)
@@ -285,7 +319,7 @@ public final class Settings
         catch (IllegalArgumentException exception)
         {
             warning("The mob name '" + name + "' in the config at `" + configKey + "` does not exist. Please use a " +
-                    "name from: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html");
+                "name from: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html");
 
             return Optional.empty();
         }
@@ -300,7 +334,7 @@ public final class Settings
         catch (IllegalArgumentException exception)
         {
             warning("The sound '" + name + "' in the config at `" + configKey + "` does not exist. Please use a " +
-                    "sound from: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html");
+                "sound from: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html");
 
             return Optional.empty();
         }
@@ -337,9 +371,9 @@ public final class Settings
                 try
                 {
                     values.add(
-                            VAR_CONVERTER.convert(field.getName())
-                                    + " &8\u00BB&7 "
-                                    + Util.formatCurrency(field.get(Config.class).toString())
+                        VAR_CONVERTER.convert(field.getName())
+                            + " &8»&7 "
+                            + Util.formatCurrency(field.get(Config.class).toString())
                     );
                 }
                 catch (Exception ignored) {}
@@ -378,13 +412,13 @@ public final class Settings
         if (missingKeys.size() > 0)
         {
             warning("Language file '" + language + "' is missing the message(s) '" + String.join("', '", missingKeys) +
-                    "'. Using the default value(s) now, which are in English. You can find the up-to-date default configured messages at:" +
-                    " https://github.com/JustEli/Coins/blob/master/src/main/resources/language/english.json");
+                "'. Using the default value(s) now, which are in English. You can find the up-to-date default configured messages at:" +
+                " https://github.com/JustEli/Coins/blob/master/src/main/resources/language/english.json");
 
             if (language.equalsIgnoreCase("english"))
             {
                 this.coins.console(Level.WARNING, "You are using the default language (English), you could delete the English" +
-                        " language file (at /Coins/language/english.json) to get rid of this warning.");
+                    " language file (at /Coins/language/english.json) to get rid of this warning.");
             }
         }
     }
@@ -434,9 +468,9 @@ public final class Settings
     private void stackTraceInfo ()
     {
         this.coins.console(Level.WARNING, "The above error does not affect the plugin. Though, it is appreciated if you report this error to Coins " +
-                "in the Discord server (https://discord.gg/fVwCETj) at #coins-errors, because the error should not happen. Include this line. " +
-                "Details[OS='" + System.getProperty("os.name") + "',JAVA='" + System.getProperty("java.version") + "',MC='" +
-                this.coins.getServer().getVersion() + "']");
+            "in the Discord server (https://discord.gg/fVwCETj) at #coins-errors, because the error should not happen. Include this line. " +
+            "Details[OS='" + System.getProperty("os.name") + "',JAVA='" + System.getProperty("java.version") + "',MC='" +
+            this.coins.getServer().getVersion() + "']");
     }
 
     private Optional<File> retrieveLanguageFile (String language)
