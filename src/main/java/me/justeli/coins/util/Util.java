@@ -3,6 +3,7 @@ package me.justeli.coins.util;
 import io.papermc.lib.PaperLib;
 import me.justeli.coins.config.Config;
 import net.md_5.bungee.api.ChatColor;
+import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Boss;
@@ -41,6 +42,8 @@ public final class Util
 {
     private static final Pattern HEX_PATTERN = Pattern.compile("(?<!\\\\)(&#[a-fA-F\\d]{6})");
     private static final HashMap<UUID, Double> PLAYER_MULTIPLIER = new HashMap<>();
+    private static double GLOBAL_MULTIPLIER = 0D;
+    private static long GLOBAL_MULTIPLIER_DURATION= 0L;
     private static final SplittableRandom RANDOM = new SplittableRandom();
 
     public static String color (@NotNull String msg)
@@ -98,7 +101,20 @@ public final class Util
             }
             PLAYER_MULTIPLIER.put(player.getUniqueId(), permissions.size() == 0? 1D : Collections.max(permissions));
         }
-        return PLAYER_MULTIPLIER.computeIfAbsent(player.getUniqueId(), empty -> 1D);
+        double playerMult = PLAYER_MULTIPLIER.computeIfAbsent(player.getUniqueId(), empty -> 1D);
+        if (GLOBAL_MULTIPLIER > playerMult && GLOBAL_MULTIPLIER_DURATION > System.currentTimeMillis()) return GLOBAL_MULTIPLIER;
+        else return playerMult;
+    }
+    
+    public static void updateGlobalMultiplier (double multiplier, long expireTime)
+    {
+        GLOBAL_MULTIPLIER = multiplier;
+        GLOBAL_MULTIPLIER_DURATION = expireTime;
+    }
+    
+    public static Pair<Double, Long> getGlobalMultiplier ()
+    {
+        return Pair.of(GLOBAL_MULTIPLIER, GLOBAL_MULTIPLIER_DURATION);
     }
 
     public static boolean isHostile (Entity entity)
@@ -188,7 +204,7 @@ public final class Util
 
     public static Optional<Double> parseDouble (String arg)
     {
-        try { return Optional.of(Util.round(new Double(arg))); }
+        try { return Optional.of(Util.round(Double.parseDouble(arg))); }
         catch (NumberFormatException exception) { return Optional.empty(); }
     }
 

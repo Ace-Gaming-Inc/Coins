@@ -9,6 +9,7 @@
     "SPAWNED_COINS" : "&9{2} Senin {1} çevrende {0} para ortaya çıktı.",
     "REMOVED_COINS" : "&9Toplamda {0} para silindi.",
     "INVENTORY_FULL" : "&cPara çekemezsin envanterin dolu.",
+    "SET_MULTIPLIER" : "&9{0} için küresel çarpanı ayarla.",
 
     "PLAYER_NOT_FOUND" : "&4Oyuncu aktif değil.",
     "COORDS_NOT_FOUND" : "&4Bu kordinatlar yada dünya bulunamadı.",
@@ -16,6 +17,7 @@
     "INVALID_AMOUNT" : "&cBu geçersiz bir miktar.",
     "INVALID_NUMBER" : "&cBu geçersiz bir sayı.",
     "INVALID_RADIUS" : "&cBu geçersiz bir çevre.",
+    "INVALID_DURATION_FORMAT" : "&cBu geçersiz bir süredir. Örnek: 1w1d1h1m (=1 hafta (w), 1 gün (d), 1 saat (h), 1 dakika (m))",
 
     "DROP_USAGE" : "&c/coins drop <oyuncu|x,y,z[,dünya]> <tutar> [çevre]",
     "REMOVE_USAGE" : "&c/coins remove [radius|all] &7- Tamamını yada komuda girdiğiniz çevredeki yere düşmüş olan paraları siler",
@@ -24,6 +26,7 @@
     "VERSION_CHECK" : "&c/coins version &7- Yeni bir sürüm olup olmadığını kontrol edin",
     "WITHDRAW_USAGE" : "&c/withdraw <değer> [tutar] &7- Para çeker ve fiziksel paraya dönüştürür",
     "TOGGLE_USAGE" :  "&c/coins toggle &7- Geneldeki parayı etkinleştirir veya deve dışı bırakır",
+    "MULTIPLIER_USAGE" :  "&c/coins setglobalmultiplier &7- tüm oyuncular için bir çarpan ayarlamak için",
 
     "DISABLED_REASONS" :  "&4Coins şu nedenle devre dışı bırakıldı(s):",
     "CURRENTLY_INSTALLED" :  "&eŞu anki Plugin Versionu: &f{0}",

@@ -9,6 +9,7 @@
   "SPAWNED_COINS" : "&9Generato {0} coins nel raggio {1} in torno a {2}.",
   "REMOVED_COINS" : "&9Rimosso un totale di {0} coins.",
   "INVENTORY_FULL" : "&cNon puoi ritirare quando il tuo inventario è pieno!",
+  "SET_MULTIPLIER" : "&9Imposta il moltiplicatore globale per una durata di {0}.",
 
   "PLAYER_NOT_FOUND" : "&4Il giocatore non è stato trovato.",
   "COORDS_NOT_FOUND" : "&4Non è stato possibile trovare le coordinate o il mondo.",
@@ -16,6 +17,7 @@
   "INVALID_AMOUNT" : "&cQuesto è un importo non valido.",
   "INVALID_NUMBER" : "&cQuesto è un numero non valido.",
   "INVALID_RADIUS" : "&cQuesto è un raggio non valido.",
+  "INVALID_DURATION_FORMAT" : "&cQuesta è una durata non valida. Esempio: 1w1d1h1m (=1 settimana (w), 1 giorno (d), 1 ora (h), 1 minuto (m))",
 
   "DROP_USAGE" : "&c/coins drop <player|x,y,z[,Mondo]> <amount> [Raggio]",
   "REMOVE_USAGE" : "&c/coins remove [radius/all] &7- Rimuove coins nel raggio",
@@ -24,6 +26,7 @@
   "VERSION_CHECK" : "&c/coins version &7- Controlla se c'è una nuova versione",
   "WITHDRAW_USAGE" : "&c/withdraw <worth> [amount] &7- Ritirare dei soldi in coins",
   "TOGGLE_USAGE" :  "&c/coins toggle &7- disable or enable Coins globally",
+  "MULTIPLIER_USAGE" :  "&c/coins setglobalmultiplier &7- impostare un moltiplicatore per tutti i giocatori",
 
   "DISABLED_REASONS" :  "&4Coins is disabled for the following reason(s):",
   "CURRENTLY_INSTALLED" :  "&eVersion currently installed: &f{0}",

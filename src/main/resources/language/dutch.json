@@ -9,6 +9,7 @@
   "SPAWNED_COINS" : "&9Je gooide {0} munten in een straal van {1} om {2} heen.",
   "REMOVED_COINS" : "&9Verwijderde in totaal {0} munten.",
   "INVENTORY_FULL" : "&cJe kunt geen munten wisselen als je inventaris vol is.",
+  "SET_MULTIPLIER" : "&9Stel globale multiplier in voor een duur van {0}.",
 
   "PLAYER_NOT_FOUND" : "&4De ingevoerde speler is niet online.",
   "COORDS_NOT_FOUND" : "&4De ingevoerde coordinaten, of wereld, waren niet gevonden.",
@@ -16,6 +17,7 @@
   "INVALID_AMOUNT" : "&cDat is een ongeldige hoeveelheid.",
   "INVALID_NUMBER" : "&cDat is een ongeldig getal.",
   "INVALID_RADIUS" : "&cDat is een ongeldige radius.",
+  "INVALID_DURATION_FORMAT" : "&cDat is een ongeldige tijdsduur. Voorbeeld: 1w1d1h1m (=1 week, 1 dag, 1 uur (h), 1 minuut)",
 
   "DROP_USAGE" : "&c/coins drop <speler|x,y,z[,wereld]> <aantal> [radius]",
   "REMOVE_USAGE" : "&c/coins remove [radius|all] &7- verwijder munten in een radius",
@@ -24,6 +26,7 @@
   "VERSION_CHECK" : "&c/coins version &7- kijk of er een update beschikbaar is",
   "WITHDRAW_USAGE" : "&c/withdraw <waarde> [aantal] &7- wissel geld in voor munten",
   "TOGGLE_USAGE" :  "&c/coins toggle &7- schakel Coins globaal in of uit",
+  "MULTIPLIER_USAGE" :  "&c/coins setglobalmultiplier &7- stel een vermenigvuldiger in voor alle spelers",
 
   "DISABLED_REASONS" :  "&4Coins is niet volledig ingeschakeld voor de volgende reden:",
   "CURRENTLY_INSTALLED" :  "&eVersie op dit moment geïnstalleerd: &f{0}",

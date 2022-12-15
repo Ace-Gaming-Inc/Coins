@@ -143,6 +143,12 @@ public final class Coins
         console(Level.INFO, "Initialized in " + (System.currentTimeMillis() - current) + "ms.");
     }
 
+    @Override
+    public void onDisable ()
+    {
+        if(this.settings != null) settings.saveGlobalMultiplier();
+    }
+
     public void reload ()
     {
         if (this.disabledReasons.size() != 0)
@@ -157,6 +163,7 @@ public final class Coins
 
         this.settings.resetWarningCount();
         this.settings.parseConfig();
+        this.settings.updateGlobalMultiplier();
         this.settings.reloadLanguage();
 
         this.baseCoin = new BaseCoin(this);

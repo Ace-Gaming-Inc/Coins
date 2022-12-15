@@ -11,11 +11,7 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.PluginCommand;
-import org.bukkit.command.TabCompleter;
+import org.bukkit.command.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -24,16 +20,15 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.SplittableRandom;
-import java.util.TreeSet;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-/** Created by Eli on 26 dec 2018. */
+/**
+ * Created by Eli on 26 dec 2018.
+ */
 public final class CoinsCommand
         implements CommandExecutor, TabCompleter
 {
@@ -160,6 +155,12 @@ public final class CoinsCommand
                     }
                 }
                 break;
+            case "setglobalmultiplier":
+                if (perm(sender, Permission.COMMAND_MULTIPLIER))
+                {
+                    setMultiplier(sender, args);
+                    break;
+                }
             default:
             {
                 sendHelp(sender);
@@ -170,7 +171,7 @@ public final class CoinsCommand
         return true;
     }
 
-    private boolean perm (CommandSender sender, String permission)
+    private boolean perm(CommandSender sender, String permission)
     {
         if (sender.hasPermission(permission))
             return true;
@@ -180,7 +181,7 @@ public final class CoinsCommand
     }
 
     @Override
-    public List<String> onTabComplete (@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args)
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args)
     {
         List<String> list = new ArrayList<>();
         if (args.length == 1)
@@ -209,6 +210,10 @@ public final class CoinsCommand
             {
                 list.add("toggle");
             }
+            if (sender.hasPermission(Permission.COMMAND_MULTIPLIER))
+            {
+                list.add("setglobalmultiplier");
+            }
         }
         else if (args.length == 2)
         {
@@ -228,7 +233,16 @@ public final class CoinsCommand
             }
             if (args[0].equalsIgnoreCase("settings") && sender.hasPermission(Permission.COMMAND_SETTINGS))
             {
-                list.add("1"); list.add("2"); list.add("3"); list.add("4"); list.add("5"); list.add("6");
+                list.add("1");
+                list.add("2");
+                list.add("3");
+                list.add("4");
+                list.add("5");
+                list.add("6");
+            }
+            if (args[0].equalsIgnoreCase("setglobalmultiplier") && sender.hasPermission(Permission.COMMAND_MULTIPLIER))
+            {
+                list.add("<multiplier>");
             }
         }
         else if (args.length == 3)
@@ -236,6 +250,10 @@ public final class CoinsCommand
             if (args[0].equalsIgnoreCase("remove") && sender.hasPermission(Permission.COMMAND_REMOVE))
             {
                 list.add("<amount>");
+            }
+            if (args[0].equalsIgnoreCase("setglobalmultiplier") && sender.hasPermission(Permission.COMMAND_MULTIPLIER))
+            {
+                list.add("<duration>");
             }
         }
         else if (args.length == 4)
@@ -430,6 +448,58 @@ public final class CoinsCommand
         sender.sendMessage(Message.REMOVED_COINS.replace(Long.toString(amount)));
     }
 
+    private void setMultiplier(CommandSender sender, String[] args)
+    {
+        Double multiplier = null;
+        long duration = -1;
+        StringBuilder durationDisplay = new StringBuilder();
+        try {
+            multiplier = Double.parseDouble(args[1]);
+            Matcher matcher = Pattern.compile("\\d+\\D+").matcher(args[2]);
+            while(matcher.find())
+            {
+                String s = matcher.group();
+                long value = Long.parseLong(s.split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)")[0]);
+                String durType = s.split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)")[1];
+                switch (durType)
+                {
+                    case "w":
+                        duration += (TimeUnit.DAYS.toMillis(7 * value));
+                        durationDisplay.append(String.format("%d weeks ", value));
+                        break;
+                    case "d":
+                        duration += (TimeUnit.DAYS.toMillis(value));
+                        durationDisplay.append(String.format("%d days ", value));
+                        break;
+                    case "h":
+                        duration += (TimeUnit.HOURS.toMillis(value));
+                        durationDisplay.append(String.format("%d hours ", value));
+                        break;
+                    case "m":
+                        duration += (TimeUnit.MINUTES.toMillis(value));
+                        durationDisplay.append(String.format("%d minutes ", value));
+                        break;
+                }
+            }
+            if (duration == -1)
+            {
+                sendHelp(sender);
+                sender.sendMessage(Message.INVALID_DURATION_FORMAT.toString());
+                return;
+            }
+        } catch (Exception e)
+        {
+            sendHelp(sender);
+        }
+        if (multiplier == null)
+        {
+            sendHelp(sender);
+            return;
+        }
+        Util.updateGlobalMultiplier(multiplier, System.currentTimeMillis() + duration);
+        sender.sendMessage(Message.SET_MULTIPLIER.replace(durationDisplay.toString()));
+    }
+
     private static final String COINS_TITLE = Util.color("&8&m     &6 Coins &e%s &8&m     &r");
 
     private void sendHelp (CommandSender sender)
@@ -484,6 +554,11 @@ public final class CoinsCommand
         if (Config.ENABLE_WITHDRAW && sender.hasPermission(Permission.WITHDRAW))
         {
             sender.sendMessage(Message.WITHDRAW_USAGE.toString());
+            lines++;
+        }
+        if (sender.hasPermission(Permission.COMMAND_MULTIPLIER))
+        {
+            sender.sendMessage(Message.MULTIPLIER_USAGE.toString());
             lines++;
         }
 

@@ -9,6 +9,7 @@
   "SPAWNED_COINS" : "&9Создано {0} монет в радиусе {1} около {2}.",
   "REMOVED_COINS" : "&9Всего удалено {0} монет.",
   "INVENTORY_FULL" : "&cВы не можете снять деньги, когда ваш инвентарь заполнен.",
+  "SET_MULTIPLIER" : "&9Установить глобальный множитель на {0}.",
 
   "PLAYER_NOT_FOUND" : "&4Этот игрок не в сети.",
   "COORDS_NOT_FOUND" : "&4Эти координаты или мир не найдены.",
@@ -16,6 +17,7 @@
   "INVALID_AMOUNT" : "&cЭто недопустимая сумма.",
   "INVALID_NUMBER" : "&cЭто недопустимая номер.",
   "INVALID_RADIUS" : "&cЭто недопустимый радиус.",
+  "INVALID_DURATION_FORMAT" : "&cЭто недопустимая продолжительность времени. Пример: 1w1d1h1m (=1 неделя (w), 1 день (d), 1 час (h), 1 минута (m))",
 
   "DROP_USAGE" : "&c/coins drop <player|x,y,z[,world]> <количество> [радиус]",
   "REMOVE_USAGE" : "&c/coins remove [радиус|all] &7- удалить монеты в радиусе",
@@ -24,6 +26,7 @@
   "VERSION_CHECK" : "&c/coins version &7- проверить есть ли новый релиз",
   "WITHDRAW_USAGE" : "&c/withdraw <worth> [количество] &7- вывести деньги в монеты",
   "TOGGLE_USAGE" :  "&c/coins toggle &7- отключить или включить Coins глобально",
+  "MULTIPLIER_USAGE" :  "&c/coins setglobalmultiplier &7- установить множитель для всех игроков",
 
   "DISABLED_REASONS" :  "&4Coins отключены по следующим причинам:",
   "CURRENTLY_INSTALLED" :  "&eУстановлена текущая версия: &f{0}",

@@ -9,6 +9,7 @@
   "SPAWNED_COINS" : "&9Du kastade {0} mynt med radien {1} runt {2}.",
   "REMOVED_COINS" : "&9Borttaget totalt av {0} mynt.",
   "INVENTORY_FULL" : "&cDu kan inte göra en utbetalning med ett fullt förråd!",
+  "SET_MULTIPLIER" : "&9Ställ in global multiplikator i {0}.",
 
   "PLAYER_NOT_FOUND" : "&4Den spelaren kunde inte hittas.",
   "COORDS_NOT_FOUND" : "&4Dessa koordinater eller världen kunde inte hittas.",
@@ -16,6 +17,7 @@
   "INVALID_AMOUNT" : "&cDet är en ogiltig mängd.",
   "INVALID_NUMBER" : "&cDet är en ogiltig antal.",
   "INVALID_RADIUS" : "&cDet är en ogiltig radie.",
+  "INVALID_DURATION_FORMAT" : "&cDet är en ogiltig varaktighet. Exempel: 1w1d1h1m (=1 vecka (w), 1 dag (d), 1 timme (h), 1 minut (m))",
 
   "DROP_USAGE" : "&c/coins drop <spelare|x,y,z[,värld]> <antal> [radie]",
   "REMOVE_USAGE" : "&c/coins remove [radie|all] &7- ta bort mynt i en radie",
@@ -24,6 +26,7 @@
   "VERSION_CHECK" : "&c/coins version &7- kolla om det finns en uppdaterad version",
   "WITHDRAW_USAGE" : "&c/withdraw <worth> [amount] &7- ta ut några pengar till mynt",
   "TOGGLE_USAGE" :  "&c/coins toggle &7- inaktivera eller aktivera Coins globalt",
+  "MULTIPLIER_USAGE" :  "&c/coins setglobalmultiplier &7- för att ställa in en multiplikator för alla spelare",
 
   "DISABLED_REASONS" :  "&4Coins är inaktiverade på grund av följande anledning(ar):",
   "CURRENTLY_INSTALLED" :  "&eNuvarande installerad version: &f{0}",

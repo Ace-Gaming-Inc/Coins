@@ -9,6 +9,7 @@
   "SPAWNED_COINS" : "&9Leidézve {0} érmék {1} sugárban {2} körül.",
   "REMOVED_COINS" : "&9Összesen {0} érmét távolított el.",
   "INVENTORY_FULL" : "&cYou cannot withdraw when your inventory is full!",
+  "SET_MULTIPLIER" : "&9Állítsa be a globális szorzót {0} időtartamra.",
 
   "PLAYER_NOT_FOUND" : "&4Ez a játékos nem található.",
   "COORDS_NOT_FOUND" : "&4Azok a koordináták vagy a világ nem volt megtalálható.",
@@ -16,6 +17,7 @@
   "INVALID_AMOUNT" : "&cEz érvénytelen mennyiség.",
   "INVALID_NUMBER" : "&cEz érvénytelen szám.",
   "INVALID_RADIUS" : "&cEz érvénytelen sugár.",
+  "INVALID_DURATION_FORMAT" : "&cEz érvénytelen idő időtartama. Példa: 1w1d1h1m (=1 hét (w), 1 nap (d), 1 óra (h), 1 perc (m))",
 
   "DROP_USAGE" : "&c/coins drop <játékos|x,y,z[,world]> <mennyiség> [sugár]",
   "REMOVE_USAGE" : "&c/coins remove [radius|all] &7- elveszi az érméket egy sugárban",
@@ -24,6 +26,7 @@
   "VERSION_CHECK" : "&c/coins version &7- check if there's a new release",
   "WITHDRAW_USAGE" : "&c/withdraw <worth> [amount] &7- vonjon pénzt érmékre",
   "TOGGLE_USAGE" :  "&c/coins toggle &7- disable or enable Coins globally",
+  "MULTIPLIER_USAGE" :  "&c/coins setglobalmultiplier &7- állítson be egy szorzót minden játékos számára",
 
   "DISABLED_REASONS" :  "&4Coins is disabled for the following reason(s):",
   "CURRENTLY_INSTALLED" :  "&eVersion currently installed: &f{0}",

@@ -9,6 +9,7 @@
   "SPAWNED_COINS" : "&9Spawned {0} coins in a radius of {1} around {2}.",
   "REMOVED_COINS" : "&9Removed a total of {0} coins.",
   "INVENTORY_FULL" : "&cYou cannot withdraw when your inventory is full.",
+  "SET_MULTIPLIER" : "&9Set global multiplier for a duration of {0}.",
 
   "PLAYER_NOT_FOUND" : "&4That player is not online.",
   "COORDS_NOT_FOUND" : "&4Those coordinates or world couldn't be found.",
@@ -16,6 +17,7 @@
   "INVALID_AMOUNT" : "&cThat is an invalid amount.",
   "INVALID_NUMBER" : "&cThat is an invalid number.",
   "INVALID_RADIUS" : "&cThat is an invalid radius.",
+  "INVALID_DURATION_FORMAT" : "&cThat is an invalid duration. Example: 1w1d1h1m (=1 week, 1 day, 1 hour, 1 minute)",
 
   "DROP_USAGE" : "&c/coins drop <player|x,y,z[,world]> <amount> [radius]",
   "REMOVE_USAGE" : "&c/coins remove [radius|all] &7- remove coins in a radius",
@@ -24,6 +26,7 @@
   "VERSION_CHECK" : "&c/coins version &7- check if there's a new release",
   "WITHDRAW_USAGE" : "&c/withdraw <worth> [amount] &7- withdraw money into coins",
   "TOGGLE_USAGE" :  "&c/coins toggle &7- disable or enable Coins globally",
+  "MULTIPLIER_USAGE" :  "&c/coins setglobalmultiplier &7- set a multiplier for all players",
 
   "DISABLED_REASONS" :  "&4Coins is disabled for the following reason(s):",
   "CURRENTLY_INSTALLED" :  "&eVersion currently installed: &f{0}",

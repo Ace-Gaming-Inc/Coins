@@ -4,6 +4,8 @@ import com.google.common.base.CaseFormat;
 import com.google.common.base.Converter;
 import me.justeli.coins.Coins;
 import me.justeli.coins.util.Util;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -170,7 +172,7 @@ public final class Settings
                 // can be improved in java 11
                 else if (configClass == Long.class || configClass == Integer.class || configClass == Float.class || configClass == Double.class)
                 {
-                    Double value = new Double(config.get(configKey, "0").toString());
+                    Double value = Double.parseDouble(config.get(configKey, "0").toString());
 
                     if (configClass == Long.class)
                     {
@@ -453,4 +455,40 @@ public final class Settings
 
         return Optional.empty();
     }
+
+    public void updateGlobalMultiplier ()
+    {
+        File file = new File(this.coins.getDataFolder() + File.separator + "multipliers.yml");
+        if (!file.exists()) return;
+        YamlConfiguration yaml = YamlConfiguration.loadConfiguration(file);
+        if (yaml.contains("global"))
+        {
+            try
+            {
+                String[] data = StringUtils.split(yaml.getString("global"), '|');
+                Util.updateGlobalMultiplier(Double.parseDouble(data[0]), Long.parseLong(data[1]));
+            } catch (Exception e)
+            {
+                coins.getLogger().warning("Multiplier data is corrupt. Global multipliers may not be applied.");
+            }
+        }
+    }
+    
+    public void saveGlobalMultiplier ()
+    {
+        Pair<Double, Long> multiplier = Util.getGlobalMultiplier();
+        if(multiplier.getRight() < System.currentTimeMillis()) return; //doesn't need to save expired multipliers.
+        File file = new File(this.coins.getDataFolder() + File.separator + "multipliers.yml");
+        try
+        {
+            if (!file.exists()) file.createNewFile();
+            YamlConfiguration yaml = YamlConfiguration.loadConfiguration(file);
+            yaml.set("global", String.format("%f|%d", multiplier.getLeft(), multiplier.getRight()));
+            yaml.save(file);
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+    
 }

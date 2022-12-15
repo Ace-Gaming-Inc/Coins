@@ -5,6 +5,7 @@ public final class Permission
 {
     public static final String COMMAND_RELOAD = "coins.command.reload";
     public static final String COMMAND_SETTINGS = "coins.command.settings";
+    public static final String COMMAND_MULTIPLIER = "coins.command.multiplier";
     public static final String COMMAND_DROP = "coins.command.drop";
     public static final String COMMAND_REMOVE = "coins.command.remove";
     public static final String COMMAND_LANGUAGE = "coins.command.language";

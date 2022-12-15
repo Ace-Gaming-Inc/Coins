@@ -8,7 +8,8 @@
   "COINS_DISABLED" : "&cCoins sind in dieser Welt nicht erlaubt.",
   "SPAWNED_COINS" : "&9Erholte {0} Coins im Radius {1} um {2}.",
   "REMOVED_COINS" : "&9Entfernt insgesamt {0} Coins.",
-  "INVENTORY_FULL" : "&cYou cannot withdraw when your inventory is full!",
+  "INVENTORY_FULL" : "&cSie können kein Geld abheben, wenn Ihr Inventar voll ist!",
+  "SET_MULTIPLIER" : "&9Legen Sie einen globalen Multiplikator für eine Dauer von {0} festgelegt.",
 
   "PLAYER_NOT_FOUND" : "&4Dieser Spieler konnte nicht gefunden werden.",
   "COORDS_NOT_FOUND" : "&4Diese Koordinaten oder diese Welt konnte nicht gefunden werden.",
@@ -16,6 +17,7 @@
   "INVALID_AMOUNT" : "&cDieser Betrag ist ungültig.",
   "INVALID_NUMBER" : "&cDiese Nummer ist ungültig.",
   "INVALID_RADIUS" : "&cDieser Radius ist ungültig.",
+  "INVALID_DURATION_FORMAT" : "&cDiese Zeitspanne ist ungültig. Example: 1w1d1h1m (=1 Woche (w), 1 Tag (d), 1 Stunde (w), 1 Minute (m))",
 
   "DROP_USAGE" : "&c/coins drop <spieler|x,y,z[,welt]> <betrag> [radius]",
   "REMOVE_USAGE" : "&c/coins remove [radius|all] &7- Löscht Coins in einem Radius",
@@ -24,6 +26,7 @@
   "VERSION_CHECK" : "&c/coins version &7- check if there's a new release",
   "WITHDRAW_USAGE" : "&c/withdraw <worth> [amount] &7- Etwas Geld in Coins zurückziehen",
   "TOGGLE_USAGE" :  "&c/coins toggle &7- disable or enable Coins globally",
+  "MULTIPLIER_USAGE" :  "&c/coins setglobalmultiplier &7- Legen Sie einen Multiplikator für alle Spieler fest",
 
   "DISABLED_REASONS" :  "&4Coins is disabled for the following reason(s):",
   "CURRENTLY_INSTALLED" :  "&eVersion currently installed: &f{0}",
