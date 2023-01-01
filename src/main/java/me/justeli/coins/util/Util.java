@@ -117,6 +117,16 @@ public final class Util
     {
         return Pair.of(GLOBAL_MULTIPLIER, GLOBAL_MULTIPLIER_DURATION);
     }
+    
+    public static double getGlobalMultiplierValue()
+    {
+        return GLOBAL_MULTIPLIER;
+    }
+    
+    public static long getGlobalMultiplierDuration()
+    {
+        return GLOBAL_MULTIPLIER_DURATION;
+    }
 
     public static boolean isHostile (Entity entity)
     {
